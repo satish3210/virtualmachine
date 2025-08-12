@@ -20,6 +20,7 @@ module "subnet1" {
   address_prefixes = ["10.0.1.0/24"]
 }
 module "pip1" {
+  depends_on = [ module.rgname, module.vnet_name, module.subnet1 ]
   source = "../module/pip"
   pip_name = "frontendpip"
   location = "centralindia"
