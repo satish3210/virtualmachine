@@ -1,0 +1,79 @@
+trigger:
+- none
+
+pool: 
+ name: agentpool
+
+stages:
+- stage: Terraform_init
+  displayName: "Terrafrom init"
+  jobs:
+  - job: terraforminit
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+       terraformVersion: 'latest'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
+        backendServiceArm: 'azure connection'
+        backendAzureRmStorageAccountName: 'storage5522'
+        backendAzureRmContainerName: 'cont1'
+        backendAzureRmKey: 'terraform.tfstate'
+- stage: Terrafrom_plan
+  displayName: "Terrafrom plan"
+  jobs:
+  - job: terraformplan
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
+        backendServiceArm: 'azure connection'
+        backendAzureRmStorageAccountName: 'storage5522'
+        backendAzureRmContainerName: 'cont1'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
+        environmentServiceNameAzureRM: 'azure connection'
+
+- stage: Terrafrom_apply
+  displayName: "Terrafrom apply"
+  jobs:
+  - job: waitForValidation
+    displayName: Manual validation
+    pool: server
+    timeoutInMinutes: 90
+    steps: 
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'ab@.com'
+        instructions: 'verify after aproove'
+
+  
+  - job: terraformapply
+    dependsOn: waitForValidation
+
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
+        backendServiceArm: 'azure connection'
+        backendAzureRmStorageAccountName: 'storage5522'
+        backendAzureRmContainerName: 'cont1'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
+        environmentServiceNameAzureRM: 'azure connection'
+
