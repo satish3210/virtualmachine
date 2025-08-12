@@ -77,3 +77,37 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
         environmentServiceNameAzureRM: 'azure connection'
 
+- stage: Terrafrom_destroy
+  displayName: "Terrafrom destroy"
+  jobs:
+  - job: waitForValidation
+    displayName: Manual validation
+    pool: server
+    timeoutInMinutes: 90
+    steps: 
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'ab@.com'
+        instructions: 'verify after aproove'
+
+  
+  - job: terraformdestroy
+    dependsOn: waitForValidation
+
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
+        backendServiceArm: 'azure connection'
+        backendAzureRmStorageAccountName: 'storage5522'
+        backendAzureRmContainerName: 'cont1'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'destroy'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
+        environmentServiceNameAzureRM: 'azure connection'
+
