@@ -1,12 +1,12 @@
 module "rgname" {
   source = "../module/resource"
-  rgname = "nishantrg"
+  rgname = "satrg"
   rglocation = "centralindia"
 }
 
 module "vnet_name" {
     depends_on = [ module.rgname ]
-    rgname = "nishantrg"
+    rgname = "satrg"
   source    = "../module/vnet"
   vnet_name = "sunnyvnet"
   location  = "centralindia"
@@ -15,7 +15,7 @@ module "subnet1" {
   depends_on = [ module.vnet_name ]
   source     = "../module/subnet"
   subnetname = "subnet1"
-  rgname     = "nishantrg"
+  rgname     = "satrg"
   vnet_name  = "sunnyvnet"
   address_prefixes = ["10.0.1.0/24"]
 }
@@ -24,7 +24,7 @@ module "pip1" {
   source = "../module/pip"
   pip_name = "frontendpip"
   location = "centralindia"
-  rgname  = "nishantrg"
+  rgname  = "satrg"
 }
 
 module "virtualmachine" {
@@ -32,7 +32,7 @@ module "virtualmachine" {
   source              = "../module/virtualmachine"
   vm_name             = "frontend-vm"
   location            = "centralindia"
-  rgname              = "nishantrg"
+  rgname              = "satrg"
   subnetname          = "subnet1"
   vnet_name           = "sunnyvnet"
   pip_name            = "frontendpip"
