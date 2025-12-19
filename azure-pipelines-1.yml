@@ -2,7 +2,7 @@ trigger:
 - none
 
 pool: 
- name: agentpool
+ name: agent1
 
 stages:
 - stage: Terraform_init
@@ -13,12 +13,4 @@ stages:
     - task: TerraformInstaller@1
       inputs:
        terraformVersion: 'latest'
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
-        backendServiceArm: 'azure connection'
-        backendAzureRmStorageAccountName: 'storage5522'
-        backendAzureRmContainerName: 'cont1'
-        backendAzureRmKey: 'terraform.tfstate'
+
