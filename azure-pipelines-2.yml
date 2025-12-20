@@ -18,7 +18,7 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
-        backendServiceArm: 'azure connection'
+        backendServiceArm: 'svc'
         backendAzureRmStorageAccountName: 'storage5522'
         backendAzureRmContainerName: 'cont1'
         backendAzureRmKey: 'terraform.tfstate'
