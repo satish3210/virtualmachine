@@ -75,7 +75,7 @@ stages:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)\dev'
-        environmentServiceNameAzureRM: 'azure connection'
+        environmentServiceNameAzureRM: 'svc'
 
 - stage: Terrafrom_destroy
   displayName: "Terrafrom destroy"
