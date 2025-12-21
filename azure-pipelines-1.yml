@@ -15,7 +15,11 @@ stages:
         inputs:
           targetType: 'inline'
           script: 'tflint --chdir=$(System.DefaultWorkingDirectory) --recursive /format:tflient.json'
-
+      - task: PublishPipelineArtifact@1
+        inputs:
+         targetPath: '$(System.DefaultWorkingDirectory)tflint.json'
+         artifact: 'tflintresult'
+         publishLocation: 'pipeline'
 - stage: Terraform_init
   displayName: "Terrafrom init"
   jobs:
