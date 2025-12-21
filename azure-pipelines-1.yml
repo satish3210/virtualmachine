@@ -5,6 +5,16 @@ pool:
  name: agent1
 
 stages:
+- stage: scan
+  displayName: "tflint scan"
+  jobs:
+  - job: tflint_scan
+    steps:
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: 'tflint --chdir=$(System.DefaultWorkingDirectory) --recursive'
+
 - stage: Terraform_init
   displayName: "Terrafrom init"
   jobs:
